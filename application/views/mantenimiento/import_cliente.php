@@ -17,6 +17,7 @@
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#ccomprobante" data-toggle="tab">Cargar Clientes</a></li>
+					<li ><a href="#exportarcomprobante" data-toggle="tab">Exportar Comprobantes</a></li>
 				</ul>
 				
 				<!-- Tab panes -->
@@ -31,6 +32,18 @@
 							<button type="submit" class="btn btn-default submit-ajax-button">Guardar</button>
 						</div>
 						<?php echo form_close(); ?>
+					</div>
+
+					<div class="tab-pane " id="exportarcomprobante" style="padding-top:15px;">						
+						<!--<div class="form-group">
+							<input name="Boleta" type="file" autocomplete="off" />
+						</div>-->
+						<input name="IdComprobante" type="hidden" value="1" />
+						<div class="text-right">
+							<a href="<?=base_url("mantenimiento/downloadFile")?>">Download</a>
+							
+						</div>
+						
 					</div>
 				</div>
 			</div>

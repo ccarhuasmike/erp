@@ -303,11 +303,35 @@ class Mantenimiento extends CI_Controller
 	public function CargarClientes()
 	{
 		if (!$this->input->is_ajax_request()) exit('No direct script access allowed');
-		//print_r(json_encode($this->configuracionmodel->CargaClienteMasiva(SafeRequestParameters($_POST))));
-		
-
 		print_r(json_encode($this->clm->cargarClientes($_FILES)));
 	}
+
+function downloadFile(){
+	$this->cpm->ExportarComprobantes(1);
+	 	
+       /*$yourFile = "Sample-CSV-Format.txt";
+        $file = @fopen($yourFile, "rb");
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=TheNameYouWant.txt');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($yourFile));
+        while (!feof($file)) {
+            print(@fread($file, 1024 * 8));
+            ob_flush();
+            flush();
+        }*/
+}
+	public function ExportarComprobantes()
+	{			
+		//$this->cpm->ExportarComprobantes(1);
+		//if (!$this->input->is_ajax_request()) exit('No direct script access allowed');
+		//print_r(json_encode($this->cpm->ExportarComprobantes($_POST['IdComprobante'])));
+	}
+
 
 	public function Ajax($action)
 	{

@@ -711,6 +711,67 @@ class ComprobanteModel extends CI_Model
 
 		return $this->jqgridmodel;
 	}
+
+	public function ExportarComprobantes($id)
+	{
+
+		$archivo = "prueba.txt";
+
+		##Generamos el archivo
+		$file_server = $_SERVER['DOCUMENT_ROOT'].'/erp/assets/inputxt/';		
+
+		// Obtenemos el correlativo actual
+		$this->db->where('id', $id);			
+		$comprobanteList = $this->db->get('comprobante')->row_array();
+
+		$this->db->where('Comprobante_Id', $id);			
+		$comprobanteDetalleList = $this->db->get('comprobantedetalle')->result();
+
+		$file_server = $_SERVER['DOCUMENT_ROOT'].'/erp/assets/inputxt/';	
+
+		// Obtenemos el correlativo actual
+		$this->db->where('id', $id);			
+		$comprobanteList = $this->db->get('comprobante')->row_array();
+
+		$this->db->where('Comprobante_Id', $id);			
+		$comprobanteDetalleList = $this->db->get('comprobantedetalle')->result();
+		
+		$cabecera = "C"."$".$comprobanteList['id'].
+					"$".$comprobanteList['Serie'].
+					"$".$comprobanteList['Correlativo'].
+					"$".$comprobanteList['ClienteNombre'].
+					"$".$comprobanteList['ClienteDireccion']."$";
+		$detalle ="";			
+		foreach($comprobanteDetalleList as $p){			
+			$detalle .= "D"."$".$p->Comprobante_Id.
+					"$".$p->ProductoNombre.
+					"$".$p->PrecioUnitarioCompra.
+					"$".$p->PrecioTotalCompra.
+					"$".$p->PrecioUnitario.
+					"$".$p->PrecioTotal."$\r\n";
+		}
+			
+		$total= "T"."$".$comprobanteList['SubTotal'].
+					"$".$comprobanteList['Total'].
+					"$".$comprobanteList['TotalCompra'].					
+					"$".$comprobanteList['Ganancia']."$";
+
+		
+		$ruta=$file_server . $archivo;
+		$f=fopen($ruta,"w");
+		fwrite($f,$cabecera."\r\n");
+		fwrite($f,$detalle);
+		fwrite($f,$total. "\r\n");
+		fclose($f);
+
+
+		$enlace = $ruta; 
+		header ("Content-Disposition: attachment; filename=Comprobante.txt"); 
+		header ("Content-Type: application/octet-stream"); 
+		header ("Content-Length: ".filesize($enlace)); 
+		readfile($enlace); 		
+		
+	}
 	public function Devolver($data)
 	{
 		$this->db->trans_start();
