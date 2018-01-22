@@ -2,10 +2,10 @@
 -- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 12-01-2018 a las 00:00:30
--- Versión del servidor: 10.1.28-MariaDB
--- Versión de PHP: 5.6.32
+-- Host: 127.0.0.1
+-- Generation Time: Jan 22, 2018 at 06:52 PM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 5.6.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `ventor`
+-- Database: `ventor`
 --
 CREATE DATABASE IF NOT EXISTS `ventor` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `ventor`;
@@ -27,7 +27,7 @@ USE `ventor`;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `almacen`
+-- Table structure for table `almacen`
 --
 
 CREATE TABLE `almacen` (
@@ -44,10 +44,18 @@ CREATE TABLE `almacen` (
   `Comprobante_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
+--
+-- Dumping data for table `almacen`
+--
+
+INSERT INTO `almacen` (`id`, `Tipo`, `Usuario_id`, `Producto_id`, `ProductoNombre`, `UnidadMedida_id`, `Cantidad`, `Precio`, `Fecha`, `Empresa_id`, `Comprobante_id`) VALUES
+(1, 1, 6, 1, '[Renzo] - Billetera', '1', '5.00', '150.00', '2018/01/13', 4, NULL),
+(2, 1, 6, 2, '[Rezon Costa] - Cartera', '1', '10.00', '100.00', '2018/01/13', 4, NULL);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cliente`
+-- Table structure for table `cliente`
 --
 
 CREATE TABLE `cliente` (
@@ -63,7 +71,7 @@ CREATE TABLE `cliente` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 --
--- Volcado de datos para la tabla `cliente`
+-- Dumping data for table `cliente`
 --
 
 INSERT INTO `cliente` (`id`, `Ruc`, `Dni`, `Nombre`, `Correo`, `Telefono1`, `Telefono2`, `Direccion`, `Empresa_id`) VALUES
@@ -77,7 +85,7 @@ INSERT INTO `cliente` (`id`, `Ruc`, `Dni`, `Nombre`, `Correo`, `Telefono1`, `Tel
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobante`
+-- Table structure for table `comprobante`
 --
 
 CREATE TABLE `comprobante` (
@@ -103,13 +111,27 @@ CREATE TABLE `comprobante` (
   `Glosa` text COLLATE utf16_spanish_ci,
   `Impresion` tinyint(4) NOT NULL DEFAULT '0',
   `UsuarioImprimiendo_id` int(11) DEFAULT NULL,
-  `Devolucion` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 Pendiente 1 Cerrado'
+  `Devolucion` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 Pendiente 1 Cerrado',
+  `ubigeoRecept` varchar(10) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `TipoRucRecept` varchar(6) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `DirRecepUrbaniza` varchar(25) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `DirRecepCodPais` varchar(2) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `CodigoAutorizacion` varchar(30) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `Sustento` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `TipoNotaCredito` varchar(2) COLLATE utf16_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
+
+--
+-- Dumping data for table `comprobante`
+--
+
+INSERT INTO `comprobante` (`id`, `Empresa_id`, `Serie`, `Correlativo`, `Cliente_id`, `ClienteIdentidad`, `ClienteNombre`, `ClienteDireccion`, `ComprobanteTipo_id`, `Estado`, `FechaRegistro`, `FechaEmitido`, `Iva`, `IvaTotal`, `SubTotal`, `Total`, `TotalCompra`, `Ganancia`, `Usuario_id`, `Glosa`, `Impresion`, `UsuarioImprimiendo_id`, `Devolucion`, `ubigeoRecept`, `TipoRucRecept`, `DirRecepUrbaniza`, `DirRecepCodPais`, `CodigoAutorizacion`, `Sustento`, `TipoNotaCredito`) VALUES
+(1, 4, 'S001', '000001', 1, '70116577', 'Segundo Mike', 'Mz G lote 15', 1, 1, '2018-01-01', '2018-01-01', '0.18', '0.18', '100.00', '120.00', '120.00', '20.00', 1, '1', 1, 1, 0, '01|01|01', '1', 'Urb Paraiso Florido', '01', '000111', 'sustento', '00');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantedetalle`
+-- Table structure for table `comprobantedetalle`
 --
 
 CREATE TABLE `comprobantedetalle` (
@@ -128,10 +150,18 @@ CREATE TABLE `comprobantedetalle` (
   `Ganancia` decimal(10,2) NOT NULL DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
+--
+-- Dumping data for table `comprobantedetalle`
+--
+
+INSERT INTO `comprobantedetalle` (`id`, `Tipo`, `Comprobante_Id`, `Producto_id`, `ProductoNombre`, `PrecioUnitarioCompra`, `PrecioTotalCompra`, `UnidadMedida_id`, `PrecioUnitario`, `PrecioTotal`, `Cantidad`, `Devuelto`, `Ganancia`) VALUES
+(1, 1, 1, 1, 'Billetera', '50.00', '50.00', '1', '50.00', '50.00', '1.00', '0.00', '20.00'),
+(2, 1, 1, 1, 'Cartera', '50.00', '50.00', '1', '50.00', '50.00', '1.00', '0.00', '50.00');
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `configuracion`
+-- Table structure for table `configuracion`
 --
 
 CREATE TABLE `configuracion` (
@@ -152,20 +182,25 @@ CREATE TABLE `configuracion` (
   `Lineas` tinyint(4) NOT NULL DEFAULT '15',
   `Impresion` tinyint(4) NOT NULL DEFAULT '1',
   `Zeros` tinyint(4) DEFAULT '5',
-  `Anio` int(4) DEFAULT '2013'
+  `Anio` int(4) DEFAULT '2013',
+  `UbigeoEmisor` varchar(10) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `TipoRucEmis` varchar(6) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `UrbanizaEmis` varchar(25) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `PaisEmis` varchar(2) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `ComuEmis` varchar(6) COLLATE utf16_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 --
--- Volcado de datos para la tabla `configuracion`
+-- Dumping data for table `configuracion`
 --
 
-INSERT INTO `configuracion` (`Empresa_id`, `RazonSocial`, `Ruc`, `Direccion`, `Iva`, `Moneda_id`, `SBoleta`, `NBoleta`, `SFactura`, `NFactura`, `BoletaFormato`, `FacturaFormato`, `BoletaFoto`, `FacturaFoto`, `Lineas`, `Impresion`, `Zeros`, `Anio`) VALUES
-(4, 'Prueba', '12345678978', 'Solo Para Pruebas', '18.00', 'S/.', '002', '14', '002', '2', '#fecha?left: 674px; top: 58px;|#cliente?left: 94px; top: 105px;|#ruc?left: 94px; top: 196px;|#direccion?left: 93px; top: 134px;|#serie?left: 674px; top: 41px;|#SubTotal?left: 708px; top: 413px;|#total?left: 701px; top: 429px;|#TotalLetras?left: 175px; top: 472px;|#IvaTotal?left: 220px; top: 474px;|#Iva?left: 743px; top: 406px;|#detalle?left: 23px; top: 214px;|#detalle .row?width: 74px;!width: 428px;!width: 107px;!width: 110px;', '#fecha?left: 674px; top: 219px;|#cliente?left: 94px; top: 159px;|#ruc?left: 93px; top: 215px;|#direccion?left: 94px; top: 189px;|#serie?left: 650px; top: 110px;|#SubTotal?left: 691px; top: 490px;|#total?left: 686px; top: 533px;|#TotalLetras?left: 72px; top: 481px;|#IvaTotal?left: 695px; top: 512px;|#Iva?left: 602px; top: 511px;|#detalle?left: 2px; top: 250px;|#detalle .row?width: 74px;!width: 428px;!width: 107px;!width: 110px;', '4_boleta.jpg', '4_factura.jpg', 15, 1, 5, 2013);
+INSERT INTO `configuracion` (`Empresa_id`, `RazonSocial`, `Ruc`, `Direccion`, `Iva`, `Moneda_id`, `SBoleta`, `NBoleta`, `SFactura`, `NFactura`, `BoletaFormato`, `FacturaFormato`, `BoletaFoto`, `FacturaFoto`, `Lineas`, `Impresion`, `Zeros`, `Anio`, `UbigeoEmisor`, `TipoRucEmis`, `UrbanizaEmis`, `PaisEmis`, `ComuEmis`) VALUES
+(4, 'Prueba', '12345678978', 'Solo Para Pruebas', '18.00', 'S/.', '002', '14', '002', '2', '#fecha?left: 674px; top: 58px;|#cliente?left: 94px; top: 105px;|#ruc?left: 94px; top: 196px;|#direccion?left: 93px; top: 134px;|#serie?left: 674px; top: 41px;|#SubTotal?left: 708px; top: 413px;|#total?left: 701px; top: 429px;|#TotalLetras?left: 175px; top: 472px;|#IvaTotal?left: 220px; top: 474px;|#Iva?left: 743px; top: 406px;|#detalle?left: 23px; top: 214px;|#detalle .row?width: 74px;!width: 428px;!width: 107px;!width: 110px;', '#fecha?left: 674px; top: 219px;|#cliente?left: 94px; top: 159px;|#ruc?left: 93px; top: 215px;|#direccion?left: 94px; top: 189px;|#serie?left: 650px; top: 110px;|#SubTotal?left: 691px; top: 490px;|#total?left: 686px; top: 533px;|#TotalLetras?left: 72px; top: 481px;|#IvaTotal?left: 695px; top: 512px;|#Iva?left: 602px; top: 511px;|#detalle?left: 2px; top: 250px;|#detalle .row?width: 74px;!width: 428px;!width: 107px;!width: 110px;', '4_boleta.jpg', '4_factura.jpg', 15, 1, 5, 2013, '01|01|01', '1', 'Urb Santa rosa', '01', '010101');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `empresa`
+-- Table structure for table `empresa`
 --
 
 CREATE TABLE `empresa` (
@@ -176,7 +211,7 @@ CREATE TABLE `empresa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 --
--- Volcado de datos para la tabla `empresa`
+-- Dumping data for table `empresa`
 --
 
 INSERT INTO `empresa` (`id`, `Nombre`, `Estado`, `ruc`) VALUES
@@ -185,7 +220,7 @@ INSERT INTO `empresa` (`id`, `Nombre`, `Estado`, `ruc`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `menu`
+-- Table structure for table `menu`
 --
 
 CREATE TABLE `menu` (
@@ -200,7 +235,7 @@ CREATE TABLE `menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 --
--- Volcado de datos para la tabla `menu`
+-- Dumping data for table `menu`
 --
 
 INSERT INTO `menu` (`id`, `Class`, `Css`, `Nombre`, `Url`, `Padre`, `Orden`, `Separador`) VALUES
@@ -223,7 +258,7 @@ INSERT INTO `menu` (`id`, `Class`, `Css`, `Nombre`, `Url`, `Padre`, `Orden`, `Se
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `menusuario`
+-- Table structure for table `menusuario`
 --
 
 CREATE TABLE `menusuario` (
@@ -232,7 +267,7 @@ CREATE TABLE `menusuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 --
--- Volcado de datos para la tabla `menusuario`
+-- Dumping data for table `menusuario`
 --
 
 INSERT INTO `menusuario` (`UsuarioTipo_id`, `Menu_id`) VALUES
@@ -281,7 +316,7 @@ INSERT INTO `menusuario` (`UsuarioTipo_id`, `Menu_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `planilla`
+-- Table structure for table `planilla`
 --
 
 CREATE TABLE `planilla` (
@@ -291,7 +326,7 @@ CREATE TABLE `planilla` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `planilla`
+-- Dumping data for table `planilla`
 --
 
 INSERT INTO `planilla` (`Id`, `Nombre`, `Value`) VALUES
@@ -301,7 +336,7 @@ INSERT INTO `planilla` (`Id`, `Nombre`, `Value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `producto`
+-- Table structure for table `producto`
 --
 
 CREATE TABLE `producto` (
@@ -316,10 +351,19 @@ CREATE TABLE `producto` (
   `Empresa_id` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 CHECKSUM=1 COLLATE=utf16_spanish_ci;
 
+--
+-- Dumping data for table `producto`
+--
+
+INSERT INTO `producto` (`id`, `Nombre`, `UnidadMedida_id`, `PrecioCompra`, `Precio`, `Stock`, `StockMinimo`, `Marca`, `Empresa_id`) VALUES
+(1, 'Billetera', '1', '150.00', '250.00', '25.00', '0.00', 'Renzo', 4),
+(2, 'Cartera', '1', '100.00', '150.00', '45.00', '0.00', 'Rezon Costa', 4),
+(3, 'Bolsa', '1', '50.00', '100.00', '15.00', '0.00', 'Renzo Costa', 4);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `servicio`
+-- Table structure for table `servicio`
 --
 
 CREATE TABLE `servicio` (
@@ -334,7 +378,7 @@ CREATE TABLE `servicio` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tabladato`
+-- Table structure for table `tabladato`
 --
 
 CREATE TABLE `tabladato` (
@@ -346,7 +390,7 @@ CREATE TABLE `tabladato` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 --
--- Volcado de datos para la tabla `tabladato`
+-- Dumping data for table `tabladato`
 --
 
 INSERT INTO `tabladato` (`id`, `Relacion`, `Value`, `Nombre`, `Orden`) VALUES
@@ -373,7 +417,7 @@ INSERT INTO `tabladato` (`id`, `Relacion`, `Value`, `Nombre`, `Orden`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -387,7 +431,7 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `Tipo`, `Nombre`, `Usuario`, `Contrasena`, `Empresa_id`, `ruc`) VALUES
@@ -395,161 +439,164 @@ INSERT INTO `usuario` (`id`, `Tipo`, `Nombre`, `Usuario`, `Contrasena`, `Empresa
 (10, 5, 'Super Usuario', 'super', 'e10adc3949ba59abbe56e057f20f883e', 4, '12345678978'),
 (11, 2, 'Vendedor', 'vendedor', 'e10adc3949ba59abbe56e057f20f883e', 4, ''),
 (12, 4, 'Almacenero', 'almacen', 'e10adc3949ba59abbe56e057f20f883e', 4, ''),
-(13, 3, 'Suspendido', 'Suspendido', 'e10adc3949ba59abbe56e057f20f883e', 4, '');
+(13, 3, 'Suspendido', 'Suspendido', 'e10adc3949ba59abbe56e057f20f883e', 4, ''),
+(14, 1, 'Mikeeeee', 'Demo', 'e10adc3949ba59abbe56e057f20f883e', 4, ''),
+(15, 1, 'Administrador', 'Eduar', 'sdadasdasdasdasdasda', 4, ''),
+(16, 1, 'Administrador', 'Eduar', 'sdadasdasdasdasdasda', 4, '12345678');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `almacen`
+-- Indexes for table `almacen`
 --
 ALTER TABLE `almacen`
   ADD PRIMARY KEY (`id`),
   ADD KEY `almacen_producto` (`Producto_id`);
 
 --
--- Indices de la tabla `cliente`
+-- Indexes for table `cliente`
 --
 ALTER TABLE `cliente`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `comprobante`
+-- Indexes for table `comprobante`
 --
 ALTER TABLE `comprobante`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `Serie_Correlativo_Empresa_id` (`Serie`,`Correlativo`,`Empresa_id`);
 
 --
--- Indices de la tabla `comprobantedetalle`
+-- Indexes for table `comprobantedetalle`
 --
 ALTER TABLE `comprobantedetalle`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `configuracion`
+-- Indexes for table `configuracion`
 --
 ALTER TABLE `configuracion`
   ADD PRIMARY KEY (`Empresa_id`);
 
 --
--- Indices de la tabla `empresa`
+-- Indexes for table `empresa`
 --
 ALTER TABLE `empresa`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `menu`
+-- Indexes for table `menu`
 --
 ALTER TABLE `menu`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `menusuario`
+-- Indexes for table `menusuario`
 --
 ALTER TABLE `menusuario`
   ADD PRIMARY KEY (`UsuarioTipo_id`,`Menu_id`);
 
 --
--- Indices de la tabla `planilla`
+-- Indexes for table `planilla`
 --
 ALTER TABLE `planilla`
   ADD PRIMARY KEY (`Id`);
 
 --
--- Indices de la tabla `producto`
+-- Indexes for table `producto`
 --
 ALTER TABLE `producto`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `servicio`
+-- Indexes for table `servicio`
 --
 ALTER TABLE `servicio`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `tabladato`
+-- Indexes for table `tabladato`
 --
 ALTER TABLE `tabladato`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `almacen`
+-- AUTO_INCREMENT for table `almacen`
 --
 ALTER TABLE `almacen`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `cliente`
+-- AUTO_INCREMENT for table `cliente`
 --
 ALTER TABLE `cliente`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de la tabla `comprobante`
+-- AUTO_INCREMENT for table `comprobante`
 --
 ALTER TABLE `comprobante`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `comprobantedetalle`
+-- AUTO_INCREMENT for table `comprobantedetalle`
 --
 ALTER TABLE `comprobantedetalle`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `empresa`
+-- AUTO_INCREMENT for table `empresa`
 --
 ALTER TABLE `empresa`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `menu`
+-- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT de la tabla `planilla`
+-- AUTO_INCREMENT for table `planilla`
 --
 ALTER TABLE `planilla`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `producto`
+-- AUTO_INCREMENT for table `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `servicio`
+-- AUTO_INCREMENT for table `servicio`
 --
 ALTER TABLE `servicio`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `tabladato`
+-- AUTO_INCREMENT for table `tabladato`
 --
 ALTER TABLE `tabladato`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
