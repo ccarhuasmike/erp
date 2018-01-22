@@ -41,8 +41,14 @@
 				  <div class="form-group">
 				    <label>Confirmar Contraseña</label>
 				    <input autocomplete="off" name="Contrasena" type="password" class="form-control password" placeholder="Confirmar contraseña de ingreso" value="" />
-				  </div>
+				  </div>		
+
 				  <?php endif; ?>
+				  <div class="form-group">
+				  	<div class="col-sm-12 text-center">
+							    	<div class="g-recaptcha" data-sitekey="<?php echo publickey; ?>"></div>
+					</div>
+				  </div>
 				  	<div class="clearfix text-right">
 					  <?php if(isset($usuario)): ?>
 					  	<button type="button" class="btn btn-danger submit-ajax-button del" value="<?php echo base_url('index.php/mantenimiento/usuarioeliminar/' . $usuario->id); ?>">Eliminar</button>

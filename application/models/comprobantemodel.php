@@ -714,54 +714,145 @@ class ComprobanteModel extends CI_Model
 
 	public function ExportarComprobantes($id)
 	{
+		$sqlquery ="
+			SELECT 	
+			conf.empresa_id as 'empresa_id',
+			c.comprobantetipo_id as 'tipo_doc',
+			c.Serie as 'Serie',
+			c.Correlativo as 'Correlativo',
+			c.FechaEmitido as 'FechaEmitido',
+			c.TipoRucRecept as 'TipoRucRecept',
+			c.DirRecepUrbaniza as 'DirRecepUrbaniza',
+			c.DirRecepCodPais as 'DirRecepCodPais',
+			c.CodigoAutorizacion,
+			c.Sustento,
+			c.TipoNotaCredito,
+			conf.Moneda_id as 'TipoMoneda',
+			conf.Ruc as 'RucEmisor',
+			em.nombre as 'NombreComerEmisor',        
+			conf.RazonSocial as 'RazonEmisor',
+			conf.Direccion	 as 'DireccionEmisor',  
+			conf.UbigeoEmisor as 'UbigeoEmisor',  
+			conf.TipoRucEmis as 'TipoRucEmis',
+			conf.ComuEmis as 'ComuEmis',
+			conf.UrbanizaEmis as 'UrbanizaEmis',
+			conf.PaisEmis as 'PaisEmis',									
+			cli.Dni			 as 'DNIRecept',
+			cli.Ruc			 as 'RucRecept',
+			cli.Nombre		 as 'NombreRecept',
+			cli.Direccion		 as 'DirRecep',
+			c.ubigeoRecept	 as 'UbigeoRecept',
+			c.Iva ,
+			c.IvaTotal ,
+			c.SubTotal ,
+			c.Total ,
+			c.TotalCompra ,
+			c.Ganancia 
+			FROM comprobante c 
+				inner join empresa em on c.empresa_id=em.id
+				inner join configuracion conf on c.empresa_id=conf.empresa_id
+			    inner join tabladato tipocomp on tipocomp.relacion='comprobantetipo' and 
+												 c.comprobantetipo_id=tipocomp.value
+				inner join tabladato estadocomp on estadocomp.relacion='comprobanteestado' and 
+												 c.comprobantetipo_id=estadocomp.value
+				inner join cliente cli on c.Cliente_id= cli.id
+			where c.id = " . $id . "";
+		$resultado = $this->db->query($sqlquery)->row_array();	
+
+		$query_detalle ="
+			
+			SELECT 
+			
+			dc.Cantidad,
+			dc.UnidadMedida_id,
+			dc.Producto_id,
+			productonombre,
+			dc.PrecioUnitario,
+			dc.PrecioTotal,
+			dc.Devuelto,
+			dc.Ganancia
+			FROM ventor.comprobantedetalle dc
+			inner join producto pro on dc.Producto_id=pro.id
+			where Comprobante_Id = " . $id . "";
+
+		$resultado_detalle = $this->db->query($query_detalle)->result();	
 
 		$archivo = "prueba.txt";
 
 		##Generamos el archivo
-		$file_server = $_SERVER['DOCUMENT_ROOT'].'/erp/assets/inputxt/';		
-
-		// Obtenemos el correlativo actual
-		$this->db->where('id', $id);			
-		$comprobanteList = $this->db->get('comprobante')->row_array();
-
-		$this->db->where('Comprobante_Id', $id);			
-		$comprobanteDetalleList = $this->db->get('comprobantedetalle')->result();
-
 		$file_server = $_SERVER['DOCUMENT_ROOT'].'/erp/assets/inputxt/';	
 
 		// Obtenemos el correlativo actual
-		$this->db->where('id', $id);			
-		$comprobanteList = $this->db->get('comprobante')->row_array();
+		// $this->db->where('id', $id);			
+		// $comprobanteList = $this->db->get('comprobante')->row_array();
 
-		$this->db->where('Comprobante_Id', $id);			
-		$comprobanteDetalleList = $this->db->get('comprobantedetalle')->result();
+		// $this->db->where('Comprobante_Id', $id);			
+		// $comprobanteDetalleList = $this->db->get('comprobantedetalle')->result();
 		
-		$cabecera = "C"."$".$comprobanteList['id'].
-					"$".$comprobanteList['Serie'].
-					"$".$comprobanteList['Correlativo'].
-					"$".$comprobanteList['ClienteNombre'].
-					"$".$comprobanteList['ClienteDireccion']."$";
+		
+		$cabecera = "A;CODI_EMPR;;".$resultado['empresa_id']."\r\n".
+					"A;TipoDTE;;".$resultado['tipo_doc']."\r\n".
+					"A;Serie;;".$resultado['Serie']."\r\n".
+					"A;Correlativo;;".$resultado['Correlativo']."\r\n".
+					"A;FchEmis;;".$resultado['FechaEmitido']."\r\n".
+					"A;TipoMoneda;;".$resultado['TipoMoneda'] ."\r\n".
+					"A;RUTEmis;;".$resultado['RucEmisor']."\r\n".
+					"A;TipoRucEmis;;".$resultado['TipoRucEmis']."\r\n".
+					"A;NomComer;;".$resultado['NombreComerEmisor']."\r\n".
+					"A;RznSocEmis;;".$resultado['RazonEmisor']."\r\n".
+					"A;ComuEmis;;".$resultado['ComuEmis']."\r\n".
+					"A;DirEmis;;".$resultado['DireccionEmisor']."\r\n".
+					"A;UrbanizaEmis;;".$resultado['UrbanizaEmis']."\r\n".
+					"A;ProviEmis;;".explode("|",$resultado['UbigeoEmisor'])[1]."\r\n".
+					"A;DeparEmis;;".explode("|",$resultado['UbigeoEmisor'])[0]."\r\n".
+					"A;DistriEmis;;".explode("|",$resultado['UbigeoEmisor'])[2]."\r\n".
+					"A;PaisEmis;;".$resultado['PaisEmis']."\r\n".
+					"A;TipoRutReceptor;;".$resultado['TipoRucRecept']."\r\n".
+					"A;RUTRecep;;".$resultado['RucRecept']."\r\n".
+					"A;RznSocRecep;;".$resultado['NombreRecept']."\r\n".
+					"A;DirRecepUbiGeo;;".str_replace('|', '',$resultado['UbigeoRecept']) ."\r\n".
+					"A;DirRecep;;".$resultado['DirRecep']."\r\n".
+					"A;DirRecepUrbaniza;;".$resultado['DirRecepUrbaniza']."\r\n".
+					"A;DirRecepProvincia;;".explode("|",$resultado['UbigeoRecept'])[1]."\r\n".
+					"A;DirRecepDepartamento;;".explode("|",$resultado['UbigeoRecept'])[0]."\r\n".
+					"A;DirRecepDistrito;;".explode("|",$resultado['UbigeoRecept'])[2]."\r\n".
+					"A;DirRecepCodPais;;".$resultado['DirRecepCodPais']."\r\n".										
+					"A;CodigoAutorizacion;;".$resultado['CodigoAutorizacion']."\r\n".		
+					"A;Sustento;;".$resultado['Sustento']."\r\n".		
+					"A;TipoNotaCredito;;".$resultado['TipoNotaCredito']."\r\n".	
+					"A;Iva;;".$resultado['Iva']."\r\n".
+					"A;IvaTotal;;".$resultado['IvaTotal']."\r\n".
+					"A;SubTotal;;".$resultado['SubTotal']."\r\n".
+					"A;Total;;".$resultado['Total']."\r\n".
+					"A;TotalCompra;;".$resultado['TotalCompra']."\r\n".
+					"A;Ganancia;;".$resultado['Ganancia']."";
+
+
 		$detalle ="";			
-		foreach($comprobanteDetalleList as $p){			
-			$detalle .= "D"."$".$p->Comprobante_Id.
-					"$".$p->ProductoNombre.
-					"$".$p->PrecioUnitarioCompra.
-					"$".$p->PrecioTotalCompra.
-					"$".$p->PrecioUnitario.
-					"$".$p->PrecioTotal."$\r\n";
+		//foreach($comprobanteDetalleList as $p){	
+		$item = 0;		
+		foreach($resultado_detalle as $p){	
+			$item = $item + 1;
+			$detalle .= "B;NroLinDet;".$item."\r\n".
+					"B;UnmdItem;".$p->UnidadMedida_id."\r\n".
+					"B;QtyItem;".$p->Cantidad."\r\n".
+					"B;VlrCodigo;".$p->Producto_id."\r\n".
+					"B;NmbItem;".$p->productonombre."\r\n".
+					"B;PrcItem;".$p->PrecioUnitario."\r\n".
+					"B;PrcItemSinIgv;".$p->PrecioTotal."\r\n";
 		}
 			
-		$total= "T"."$".$comprobanteList['SubTotal'].
+		/*$total= "T"."$".$comprobanteList['SubTotal'].
 					"$".$comprobanteList['Total'].
 					"$".$comprobanteList['TotalCompra'].					
-					"$".$comprobanteList['Ganancia']."$";
+					"$".$comprobanteList['Ganancia']."$";*/
 
 		
 		$ruta=$file_server . $archivo;
 		$f=fopen($ruta,"w");
 		fwrite($f,$cabecera."\r\n");
 		fwrite($f,$detalle);
-		fwrite($f,$total. "\r\n");
+		//fwrite($f,$total. "\r\n");
 		fclose($f);
 
 

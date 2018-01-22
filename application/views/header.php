@@ -26,7 +26,7 @@
     
     <!-- Hight Charts -->
     <script type="text/javascript" src="<?php echo base_url('assets/bootstrap/js/highcharts/highcharts.js'); ?>"></script>
-    
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script>
 	    function base_url(url)
 	    {

@@ -79,9 +79,6 @@
 							    
 							    <div class="col-sm-12 text-center">
 							    	<div class="g-recaptcha" data-sitekey="<?php echo publickey; ?>"></div>
-
-							    	 <!--<?php echo recaptcha_get_html(publickey, error_catpcha); ?>-->
-							      
 							    </div>
 							  </div>
 

@@ -16,13 +16,27 @@ class UsuarioModel extends CI_Model
 	}
 	public function Registrar($data)
 	{
-		$data['Empresa_id'] = $this->user->Empresa_id;
-		$data['Contrasena'] = md5($data['Contrasena']);
-		$this->db->insert('usuario', $data);
 
-		$this->responsemodel->SetResponse(true);
-		$this->responsemodel->href   = 'mantenimiento/usuario/' . $this->db->insert_id();
+		$url = 'https://www.google.com/recaptcha/api/siteverify';
+		$privatekey =privatekey;
+		$response = file_get_contents($url."?secret=".$privatekey."&response=".$_POST['g-recaptcha-response']."&remoteip=".$_SERVER['REMOTE_ADDR']);
+		$datos = json_decode($response);
 
+		if (isset($datos->success) AND $datos->success==true) {
+			$this->db->where('id', $this->user->Empresa_id);
+			$empresa = $this->db->get('empresa')->row_array();
+			$data['Empresa_id'] = $empresa['id'];
+			$data['ruc'] = $empresa['ruc'];
+			$data['Contrasena'] = md5($data['Contrasena']);
+			unset($data['g-recaptcha-response']);
+			$this->db->insert('usuario', $data);
+
+			$this->responsemodel->SetResponse(true);
+			$this->responsemodel->href   = 'mantenimiento/usuario/' . $this->db->insert_id();
+		} else {
+			$this->responsemodel->setResponse(false);
+			$this->responsemodel->message = "Por favor marque captcha";
+		}
 		return $this->responsemodel;
 	}
 	public function Obtener($id)

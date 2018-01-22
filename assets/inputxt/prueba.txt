@@ -1,4 +1,50 @@
-C$1$S$000001$Segundo Mike$Mz G lote 15$
-D$1$Billetera$50.00$50.00$50.00$50.00$
-D$1$Cartera$50.00$50.00$50.00$50.00$
-T$100.00$120.00$120.00$20.00$
+A;CODI_EMPR;;4
+A;TipoDTE;;1
+A;Serie;;S001
+A;Correlativo;;000001
+A;FchEmis;;2018-01-01
+A;TipoMoneda;;S/.
+A;RUTEmis;;12345678978
+A;TipoRucEmis;;1
+A;NomComer;;DEMO
+A;RznSocEmis;;Prueba
+A;ComuEmis;;010101
+A;DirEmis;;Solo Para Pruebas
+A;UrbanizaEmis;;Urb Santa rosa
+A;ProviEmis;;01
+A;DeparEmis;;01
+A;DistriEmis;;01
+A;PaisEmis;;01
+A;TipoRutReceptor;;1
+A;RUTRecep;;12345678952
+A;RznSocRecep;;Segundo Mike 
+A;DirRecepUbiGeo;;010101
+A;DirRecep;;Mz G Lote 5 Asc Paraiso florido
+A;DirRecepUrbaniza;;Urb Paraiso Florido
+A;DirRecepProvincia;;01
+A;DirRecepDepartamento;;01
+A;DirRecepDistrito;;01
+A;DirRecepCodPais;;01
+A;CodigoAutorizacion;;000111
+A;Sustento;;sustento
+A;TipoNotaCredito;;00
+A;Iva;;0.18
+A;IvaTotal;;0.18
+A;SubTotal;;100.00
+A;Total;;120.00
+A;TotalCompra;;120.00
+A;Ganancia;;20.00
+B;NroLinDet;1
+B;UnmdItem;1
+B;QtyItem;1.00
+B;VlrCodigo;1
+B;NmbItem;Billetera
+B;PrcItem;50.00
+B;PrcItemSinIgv;50.00
+B;NroLinDet;2
+B;UnmdItem;1
+B;QtyItem;1.00
+B;VlrCodigo;1
+B;NmbItem;Cartera
+B;PrcItem;50.00
+B;PrcItemSinIgv;50.00
